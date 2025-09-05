@@ -1,0 +1,65 @@
+{
+    "name": "regexplain",
+    "version": "0.0.0",
+    "type": "module",
+    "bin": {
+        "regexplain": "dist/bin.js"
+    },
+    "engines": {
+        "node": ">=22.18.0"
+    },
+    "main": "dist/bin.js",
+    "description": "A CLI tool that uses Grok AI to explain and demystify regular expressions.",
+    "keywords": [
+        "regex",
+        "regex-analyzer",
+        "regex-explainer",
+        "regular-expressions",
+        "productivity",
+        "utility"
+    ],
+    "scripts": {
+        "tsc": "tsc",
+        "dev": "node --watch src/bin.ts",
+        "prebuild": "npm run tsc && npm run clean",
+        "build": "tsdown",
+        "prestart": "npm run build",
+        "start": "node dist/bin.js",
+        "prelint": "biome format --write ./src/*.ts ./tests/*.ts",
+        "lint": "biome lint ./src/*.ts ./tests/*.ts",
+        "check": "biome check --write ./src/*.ts ./tests/*.ts",
+        "prepare": "husky",
+        "commit": "cz",
+        "clean": "del-cli dist/ coverage/ *.log",
+        "prepublishOnly": "npm run clean && npm run build"
+    },
+    "repository": {
+        "url": "https://github.com/Silent-Watcher/regexplain"
+    },
+    "author": {
+        "email": "backendwithali@gmail.com",
+        "name": "Ali nazari"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@biomejs/biome": "^2.2.2",
+        "@types/node": "^24.3.1",
+        "cz-conventional-changelog": "^3.0.1",
+        "del-cli": "^6.0.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.6",
+        "tsdown": "^0.14.2",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "commander": "^14.0.0",
+        "groq-sdk": "^0.32.0",
+        "https-proxy-agent": "^7.0.6",
+        "ora": "^8.2.0"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
+}

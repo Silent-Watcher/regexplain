@@ -1,1 +1,4 @@
-console.log('hello world');
+#!/usr/bin/env node
+import { runProgram } from "./utils/program";
+
+runProgram();

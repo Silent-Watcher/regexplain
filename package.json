@@ -1,6 +1,6 @@
 {
     "name": "regexplain",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "type": "module",
     "bin": {
         "regexplain": "dist/bin.js"
@@ -44,7 +44,7 @@
     "devDependencies": {
         "@biomejs/biome": "^2.2.2",
         "@types/node": "^24.3.1",
-        "cz-conventional-changelog": "^3.0.1",
+        "cz-conventional-changelog": "^3.3.0",
         "del-cli": "^6.0.0",
         "husky": "^9.1.7",
         "lint-staged": "^16.1.6",
@@ -52,10 +52,10 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
-        "commander": "^14.0.0",
         "groq-sdk": "^0.32.0",
         "https-proxy-agent": "^7.0.6",
-        "ora": "^8.2.0"
+        "ora": "^8.2.0",
+        "sade": "^1.8.1"
     },
     "config": {
         "commitizen": {

@@ -52,8 +52,10 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
+        "enquirer": "^2.4.1",
         "groq-sdk": "^0.32.0",
         "https-proxy-agent": "^7.0.6",
+        "keytar": "^7.9.0",
         "ora": "^8.2.0",
         "sade": "^1.8.1"
     },

@@ -10,7 +10,7 @@ function isValidUrl(input: string) {
 	try {
 		new URL(input);
 		return true;
-	} catch (error) {
+	} catch (_error) {
 		return false;
 	}
 }

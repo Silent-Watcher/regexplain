@@ -1,10 +1,10 @@
-import Groq from "groq-sdk";
-import Enquirer from "enquirer";
-import keytar from "keytar";
-import { prompt as aiPrompt } from "./prompt";
-import ora from "ora";
-import { ACCOUNT_NAME, SERVICE_NAME } from "../utils/constants";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import Enquirer from 'enquirer';
+import Groq from 'groq-sdk';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import keytar from 'keytar';
+import ora from 'ora';
+import { ACCOUNT_NAME, SERVICE_NAME } from '../utils/constants';
+import { prompt as aiPrompt } from './prompt';
 
 function isValidUrl(input: string) {
 	try {
@@ -30,21 +30,20 @@ async function getApiKey() {
 		}
 
 		// 3. Prompt user
-		const { apiKey: newKey } = await prompt({
-			type: "password",
-			name: "apiKey",
-			message: "Enter your Groq API key:",
-			validate: (
-				value: string,
-			) => (value.trim() === "" ? "API key cannot be empty" : true),
-			initial: "",
+		const { apiKey: newKey } = (await prompt({
+			type: 'password',
+			name: 'apiKey',
+			message: 'Enter your Groq API key:',
+			validate: (value: string) =>
+				value.trim() === '' ? 'API key cannot be empty' : true,
+			initial: '',
 			result: (value: string) => value.trim(),
 			stdin: process.stdin,
 			stdout: process.stdout,
-		}) as { apiKey: string };
+		})) as { apiKey: string };
 
 		await keytar.setPassword(SERVICE_NAME, ACCOUNT_NAME, newKey);
-		console.log("\n✅ API key saved securely!");
+		console.log('\n✅ API key saved securely!');
 		return newKey;
 	} catch (error) {
 		console.error(error);
@@ -58,24 +57,24 @@ async function getHttpProxyAgent(): Promise<
 	const envProxy = process.env.HTTPS_PROXY || process.env.https_proxy;
 
 	if (envProxy) {
-		console.log("Using proxy from environment variables");
+		console.log('Using proxy from environment variables');
 		return new HttpsProxyAgent(envProxy);
 	}
 
 	const { setProxy } = await Enquirer.prompt<{ setProxy: boolean }>({
-		type: "confirm",
-		name: "setProxy",
-		message: "Do you want to set a proxy?",
+		type: 'confirm',
+		name: 'setProxy',
+		message: 'Do you want to set a proxy?',
 		initial: false,
 	});
 
 	if (!setProxy) return undefined;
 
 	const { proxyAddr } = await Enquirer.prompt<{ proxyAddr: string }>({
-		type: "input",
-		name: "proxyAddr",
-		message: "Enter proxy address (e.g., http://user:pass@localhost:7890):",
-		validate: (value) => isValidUrl(value) || "Invalid URL format",
+		type: 'input',
+		name: 'proxyAddr',
+		message: 'Enter proxy address (e.g., http://user:pass@localhost:7890):',
+		validate: (value) => isValidUrl(value) || 'Invalid URL format',
 	});
 
 	return new HttpsProxyAgent(proxyAddr);
@@ -85,31 +84,31 @@ async function getHttpProxyAgent(): Promise<
 export async function explain(regex: string) {
 	try {
 		const apiKey = await getApiKey();
-		console.log("apiKey: ", apiKey);
 		const httpAgent = await getHttpProxyAgent();
 
 		const groq = new Groq({ apiKey, ...(httpAgent ? { httpAgent } : {}) });
 
-		const spinner = ora("loading ....").start();
+		const spinner = ora('loading ....').start();
 		const completion = await groq.chat.completions.create({
-			model: "openai/gpt-oss-20b",
+			model: 'openai/gpt-oss-20b',
 			messages: [
-				{ role: "system", content: "You are a regex explainer." },
-				{ role: "user", content: aiPrompt(regex) },
+				{ role: 'system', content: 'You are a regex explainer.' },
+				{ role: 'user', content: aiPrompt(regex) },
 			],
 		});
 
 		spinner.stop().clear();
 
-		console.log("\n📖 Explanation:\n");
+		console.log('\n📖 Explanation:\n');
 		if (
-			completion.choices && completion.choices[0] &&
+			completion.choices &&
+			completion.choices[0] &&
 			completion.choices[0].message
 		) {
 			console.log(completion.choices[0].message.content);
 		} else {
 			console.error(
-				"Error: Completion result is undefined or malformed.",
+				'Error: Completion result is undefined or malformed.',
 			);
 		}
 	} catch (error) {
